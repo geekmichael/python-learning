@@ -1,21 +1,21 @@
 import turtle
 
-def initWindow(title = "Welcome to the turtle zoo!", bgcolor = "white", delay = 10):
+def initWindow(title = "Welcome to the turtle zoo!", bgColor = "white", delay = 10):
     # Initialises the window for drawing
     window = turtle.Screen()
     window.setup(width=600, height=500, startx=0, starty=0)
     window.title(title)
-    window.bgcolor(bgcolor)
+    window.bgcolor(bgColor)
     # Slow down the drawing speed
     window.delay(delay)
     return window
 
-def initTurtle(shape = "turtle", color = "darkgreen"):
+def initTurtle(shape = "turtle", strokeColor = "darkgreen"):
     # Initialises the turtle
-    # Shape, size and color
+    # Shape, size and strokeColor
     brad = turtle.Turtle()
     brad.shape(shape)
-    brad.color(color)
+    brad.color(strokeColor)
     return brad
 
 def moveTurtle(myTurtle, x = 0, y = 0):
@@ -23,38 +23,40 @@ def moveTurtle(myTurtle, x = 0, y = 0):
     myTurtle.setpos(x, y)
     myTurtle.pendown()
 
-def draw_square(myTurtle, color = "green", length = 10):
-    myTurtle.color(color)
-    # Starts drawing the box
-    i = 1
-    for i in range(4):
+def draw_shape(myTurtle, shape = "line", length = 10, strokeColor = "blue", fillColor = ""):
+
+    myTurtle.color(strokeColor)
+
+    if (fillColor):
+        myTurtle.fill(True)
+        myTurtle.fillcolor(fillColor)
+
+    if shape == "square":
+        for i in range(4):
+            myTurtle.forward(length)
+            myTurtle.right(90)
+    elif shape == "circle":
+        myTurtle.circle(length)
+    elif shape == "triangle":
+        for i in range(2):
+            myTurtle.forward(length)
+            myTurtle.left(120)
         myTurtle.forward(length)
-        myTurtle.right(90)
-
-def draw_circle(myTurtle, color = "blue", radius = 100):
-    myTurtle.color(color)
-    myTurtle.circle(radius)
-
-def draw_triangle(myTurtle, color = "red", length = 10):
-    myTurtle.color(color)
-    i = 1
-    for i in range(2):
+    elif shape == "rhombus":
+        for i in range(4):
+            myTurtle.forward(length)
+            myTurtle.right(60 + 60 * (i % 2))
+    else:
+        # draw a line as default
         myTurtle.forward(length)
-        myTurtle.left(120)
-    myTurtle.forward(length)
 
-def draw_rhombus(myTurtle, color = "blue", length = 10):
-    myTurtle.color(color)
-    for i in range(4):
-        myTurtle.forward(length)
-        myTurtle.right(60 + 60 * (i % 2))
+    myTurtle.fill(False)
 
-def draw_flower(shape, color, myTurtle, length = 10):
-    currentPosition = myTurtle.position()
+def draw_flower(myTurtle, shape, length = 10, strokeColor = "red"):
     myTurtle.speed("fastest")
 
     for i in range(1, 37):
-        shape(myTurtle, color, length)
+        draw_shape(myTurtle, shape, length, strokeColor)
         myTurtle.right(10)
 
     # Reset Turtle's heading to the south
@@ -69,11 +71,11 @@ moveTurtle(myTurtle, -200, 0)
 # draw_circle(myTurtle, 100)
 # draw_triangle(myTurtle, 100)
 # draw_square_art(myTurtle, 100)
-draw_flower(draw_rhombus, "red", myTurtle, 30)
+draw_flower(myTurtle, "rhombus", 30, "red")
 moveTurtle(myTurtle, -100, 0)
-draw_flower(draw_triangle, "green", myTurtle, 30)
+draw_flower(myTurtle, "triangle", 30, "green")
 moveTurtle(myTurtle, 50, 0)
-draw_flower(draw_square, "blue", myTurtle, 50)
+draw_flower(myTurtle, "square", 50, "blue")
 
 # Click the window to exit
 myWindow.exitonclick()
