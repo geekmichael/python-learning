@@ -24,12 +24,11 @@ def moveTurtle(myTurtle, x = 0, y = 0):
     myTurtle.pendown()
 
 def draw_shape(myTurtle, shape = "line", length = 10, strokeColor = "blue", fillColor = ""):
-
+    currentHeading = myTurtle.heading()
     myTurtle.color(strokeColor)
-
     if (fillColor):
-        myTurtle.fill(True)
         myTurtle.fillcolor(fillColor)
+        myTurtle.fill(True)
 
     if shape == "square":
         for i in range(4):
@@ -38,10 +37,10 @@ def draw_shape(myTurtle, shape = "line", length = 10, strokeColor = "blue", fill
     elif shape == "circle":
         myTurtle.circle(length)
     elif shape == "triangle":
-        for i in range(2):
-            myTurtle.forward(length)
+        # After 3 times back to the start point
+        for i in range(3):
             myTurtle.left(120)
-        myTurtle.forward(length)
+            myTurtle.forward(length)
     elif shape == "rhombus":
         for i in range(4):
             myTurtle.forward(length)
@@ -51,31 +50,52 @@ def draw_shape(myTurtle, shape = "line", length = 10, strokeColor = "blue", fill
         myTurtle.forward(length)
 
     myTurtle.fill(False)
+    myTurtle.setheading(currentHeading)
 
-def draw_flower(myTurtle, shape, length = 10, strokeColor = "red"):
+def draw_flower(myTurtle, shape, length = 10, petals = 36, strokeColor = "red"):
     myTurtle.speed("fastest")
-
-    for i in range(1, 37):
+    angle = 360 / (petals)
+    for i in range(1, petals + 1):
         draw_shape(myTurtle, shape, length, strokeColor)
-        myTurtle.right(10)
+        myTurtle.right(angle)
 
     # Reset Turtle's heading to the south
     myTurtle.setheading(270)
     myTurtle.speed("slowest")
     myTurtle.forward(150)
 
+def draw_pyradmin(myTurtle, shape, edge = 100, length = 5, strokeColor = "black", fillColor = "yellow"):
+    preEdge = edge
+    newEdge = edge / 2
+    for i in range(1,4):
+        if (newEdge <= length):
+            newEdge = 2 * newEdge
+            preEdge = 2 * preEdge
+            break
+        draw_shape(myTurtle, "triangle", newEdge)
+        draw_pyradmin(myTurtle, "triangle", newEdge, length)
+        myTurtle.left(120)
+        myTurtle.forward(preEdge)
+
 myWindow = initWindow()
 myTurtle = initTurtle()
 moveTurtle(myTurtle, -200, 0)
-# draw_square(myTurtle, 100)
-# draw_circle(myTurtle, 100)
-# draw_triangle(myTurtle, 100)
-# draw_square_art(myTurtle, 100)
-draw_flower(myTurtle, "rhombus", 30, "red")
+# A flower with 36 rhombuses
+draw_flower(myTurtle, "rhombus", 30, 36, "red")
+
+# A flower with 18 triangles
 moveTurtle(myTurtle, -100, 0)
-draw_flower(myTurtle, "triangle", 30, "green")
+draw_flower(myTurtle, "triangle", 30, 18, "green")
+
+# A flower with 72 squares
 moveTurtle(myTurtle, 50, 0)
-draw_flower(myTurtle, "square", 50, "blue")
+draw_flower(myTurtle, "square", 50, 72, "blue")
+
+# A pyradmin
+myTurtle.speed("fastest")
+myTurtle.setheading(0)
+moveTurtle(myTurtle, 250, -50)
+draw_pyradmin(myTurtle, "triangle", 100, 5, "black", "yellow")
 
 # Click the window to exit
 myWindow.exitonclick()
